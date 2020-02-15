@@ -71,7 +71,8 @@ const Header = ({ history }) => {
 
   const deleteData = () => {
     removeItem(strings.RESULTS);
-    history.go();
+    history.push('/');
+    setDialogOpen(false);
   };
 
   // Drawer Side List Component
