@@ -73,6 +73,7 @@ const Header = ({ history }) => {
     removeItem(strings.RESULTS);
     history.push('/');
     setDialogOpen(false);
+    setDrawerOpen(false);
   };
 
   // Drawer Side List Component
