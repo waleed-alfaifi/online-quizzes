@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -55,7 +55,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Header = () => {
+const Header = ({ history }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -71,7 +71,7 @@ const Header = () => {
 
   const deleteData = () => {
     removeItem(strings.RESULTS);
-    window.location.reload();
+    history.go();
   };
 
   // Drawer Side List Component
@@ -169,4 +169,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default withRouter(Header);
