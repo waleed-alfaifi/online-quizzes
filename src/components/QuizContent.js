@@ -12,7 +12,12 @@ import {
 } from '@material-ui/core';
 import Question from './Question';
 import ScorePage from './ScorePage';
-import { setItemSession, getItemSession } from '../helpers/storage';
+import {
+  setItemSession,
+  getItemSession,
+  setItem,
+  getItem,
+} from '../helpers/storage';
 import { strings } from '../config/constants';
 
 const useStyles = makeStyles(theme => ({
@@ -95,11 +100,21 @@ const QuizContent = props => {
 
   useEffect(() => {
     const prevPageObject = getItemSession(strings.CURRENT_PAGE);
-    setItemSession(strings.CURRENT_PAGE, {
-      ...prevPageObject,
-      [currentQuiz.id]: page,
-    });
-  }, [page, currentQuiz.id]);
+    if (page !== numberOfQuestions + 1) {
+      setItemSession(strings.CURRENT_PAGE, {
+        ...prevPageObject,
+        [currentQuiz.id]: page,
+      });
+    } else {
+      setAnswers([]);
+
+      // To avoid storing score page in storage
+      setItemSession(strings.CURRENT_PAGE, {
+        ...prevPageObject,
+        [currentQuiz.id]: 0,
+      });
+    }
+  }, [page, currentQuiz.id, numberOfQuestions]);
 
   useEffect(() => {
     const prevAnswersObject = getItemSession(strings.ANSWERS);
@@ -111,11 +126,38 @@ const QuizContent = props => {
 
   useEffect(() => {
     const prevScoreObject = getItemSession(strings.SCORE);
-    setItemSession(strings.SCORE, {
-      ...prevScoreObject,
-      [currentQuiz.id]: score.value,
-    });
-  }, [score, currentQuiz.id]);
+
+    if (page !== numberOfQuestions + 1) {
+      setItemSession(strings.SCORE, {
+        ...prevScoreObject,
+        [currentQuiz.id]: score.value,
+      });
+    } else {
+      // Reset score in storage if the current page is 0
+      setItemSession(strings.SCORE, {
+        ...prevScoreObject,
+        [currentQuiz.id]: 0,
+      });
+    }
+  }, [score, currentQuiz.id, numberOfQuestions, page]);
+
+  useEffect(() => {
+    if (page === numberOfQuestions + 1) {
+      // Save result in local storage
+      const result = {
+        quiz: currentQuiz.title,
+        value: score.value,
+        date: Date.now(),
+      };
+
+      const sotredResults = getItem(strings.RESULTS);
+      if (sotredResults) {
+        setItem(strings.RESULTS, [...sotredResults, result]);
+      } else {
+        setItem(strings.RESULTS, [result]);
+      }
+    }
+  }, [page, numberOfQuestions, score, currentQuiz.title]);
 
   const selectAnswer = (questionId, answerId) => {
     const newAnswer = {
@@ -155,6 +197,7 @@ const QuizContent = props => {
         }));
       }
     });
+
     // Move to the score page
     setPage(numberOfQuestions + 1);
   };
@@ -162,7 +205,7 @@ const QuizContent = props => {
   const retakeQuiz = () => {
     setPage(0);
     setAnswers([]);
-    setScore({ ...score, value: 0 });
+    setScore(prevScore => ({ ...prevScore, value: 0 }));
   };
 
   const nextPage = () => {

@@ -24,10 +24,13 @@ const useStyles = makeStyles(theme => ({
       gridTemplateColumns: '1fr 1fr 1fr 1fr',
     },
   },
+  welcomeAlert: {
+    borderRadius: 0,
+  },
 }));
 
 // Cuatom Button
-const CustomButton = withStyles(theme => ({
+const CustomButton = withStyles(() => ({
   root: {
     textTransform: 'none',
     textAlign: 'left',
@@ -36,7 +39,6 @@ const CustomButton = withStyles(theme => ({
 
 const QuizzesNav = props => {
   const classes = useStyles();
-  const [isFirstTime, setIsFirstTime] = React.useState(true);
   const { quizzes, handleChoosingQuiz, currentQuiz } = props;
 
   const renderButtons = () => {
@@ -63,15 +65,14 @@ const QuizzesNav = props => {
 
   return (
     <Paper variant="outlined" square className={classes.paper}>
-      {isFirstTime && (
-        <Alert severity="info" onClose={() => setIsFirstTime(false)}>
-          Hi there! <br />
-          Here you can take in different quizzes, log in to save your results
-          and more!
-          <br />
-          Go ahead and choose a quiz to get started!
-        </Alert>
-      )}
+      <Alert severity="info" className={classes.welcomeAlert}>
+        Hi there! <br />
+        Here you can challenge yourself with different quizzes in different
+        areas. Your results will be saved in your browser storage. You can see a
+        nice graphical representation of your results in your dashboard.
+        <br />
+        Go ahead and choose a quiz to get started!
+      </Alert>
       <Container fixed className={classes.container}>
         {renderButtons()}
       </Container>

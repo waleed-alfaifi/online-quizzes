@@ -1,0 +1,145 @@
+import React, { useMemo, useState, useEffect } from 'react';
+import { Container } from '@material-ui/core';
+import { Chart } from 'react-charts';
+import { getItem } from '../../helpers/storage';
+import { strings } from '../../config/constants';
+
+const Dashboard = () => {
+  const [results, setResults] = useState();
+
+  const series = useMemo(
+    () => ({
+      type: 'bar',
+    }),
+    []
+  );
+
+  useEffect(() => {
+    const storedResults = getItem(strings.RESULTS);
+    if (storedResults) {
+    }
+    // setResults(getItem(strings.RESULTS));
+  }, [results]);
+
+  const quiz1 = useMemo(
+    () => [
+      {
+        label: 'Trial 2',
+        data: [['14/Feb/2020', 80]],
+      },
+      {
+        label: 'Trial 3',
+        data: [['14/Feb/2020', 90]],
+      },
+      {
+        label: 'Trial 1',
+        data: [['15/Feb/2020', 55]],
+      },
+      {
+        label: 'Trial 1',
+        data: [['14/Feb/2020', 40]],
+      },
+      {
+        label: 'Trial 2',
+        data: [['15/Feb/2020', 70]],
+      },
+    ],
+    []
+  );
+
+  //   const quiz1 = [
+  //     {
+  //       label: 'Trial 2',
+  //       data: [['14/Feb/2020', 80]],
+  //     },
+  //     {
+  //       label: 'Trial 3',
+  //       data: [['14/Feb/2020', 90]],
+  //     },
+  //     {
+  //       label: 'Trial 1',
+  //       data: [['15/Feb/2020', 55]],
+  //     },
+  //     {
+  //       label: 'Trial 1',
+  //       data: [['14/Feb/2020', 40]],
+  //     },
+  //     {
+  //       label: 'Trial 2',
+  //       data: [['15/Feb/2020', 70]],
+  //     },
+  //   ];
+
+  const quiz2 = [
+    {
+      label: 'Trial 1',
+      data: [['14/Feb/2020', 40]],
+    },
+    {
+      label: 'Trial 2',
+      data: [['14/Feb/2020', 80]],
+    },
+    {
+      label: 'Trial 3',
+      data: [['14/Feb/2020', 90]],
+    },
+    {
+      label: 'Trial 1',
+      data: [['15/Feb/2020', 55]],
+    },
+  ];
+
+  //   const quiz1 = [
+  //     {
+  //       label: '14/Feb/2020',
+  //       data: [
+  //         ['Trial 1', 40],
+  //         ['Trial 2', 50],
+  //         ['Trial 3', 20],
+  //         ['Trial 4', 5],
+  //       ],
+  //     },
+  //     {
+  //       label: '15/Feb/2020',
+  //       data: [['Trial 1', 40]],
+  //     },
+  //   ];
+
+  //   const quiz2 = [
+  //     {
+  //       label: 'Quiz 2',
+  //       data: [
+  //         ['14/Feb/2020', 40],
+  //         ['14/Feb/2020', 50],
+  //         ['14/Feb/2020', 20],
+  //         ['15/Feb/2020', 30],
+  //       ],
+  //     },
+  //   ];
+
+  const axes = React.useMemo(
+    () => [
+      { primary: true, type: 'ordinal', position: 'bottom' },
+      { position: 'left', type: 'linear', stacked: false },
+    ],
+    []
+  );
+
+  return (
+    <div>
+      <Container maxWidth="lg">
+        <div style={{ height: '300px' }}>
+          <Chart data={quiz1} series={series} axes={axes} tooltip />
+        </div>
+        {/* <div style={{ height: '300px' }}>
+          <Chart data={quiz2} series={series} axes={axes} tooltip />
+        </div> */}
+        {/* <div style={{ height: '300px' }}>
+          <Chart data={data} series={series} axes={axes} tooltip />
+        </div> */}
+      </Container>
+    </div>
+  );
+};
+
+export default Dashboard;

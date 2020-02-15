@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -11,14 +12,22 @@ import {
   ListItemIcon,
   Divider,
   IconButton,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@material-ui/core';
 import {
   Menu,
-  AccountCircle,
-  ExitToApp,
+  Dashboard,
+  Delete,
   ChevronLeft,
+  Home,
+  Launch,
 } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
+import { removeItem } from '../helpers/storage';
+import { strings } from '../config/constants';
 
 // Custom styles
 const useStyles = makeStyles(theme => ({
@@ -41,16 +50,28 @@ const useStyles = makeStyles(theme => ({
     width: 250,
     paddingTop: 0,
   },
+  resetData: {
+    color: theme.palette.error.main,
+  },
 }));
 
 const Header = () => {
-  const [state, setState] = React.useState({
-    open: false,
-  });
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   const classes = useStyles();
 
-  const toggleDrawer = e => {
-    setState({ ...state, open: !state.open });
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
+  const toggleDialog = () => {
+    setDialogOpen(!dialogOpen);
+  };
+
+  const deleteData = () => {
+    removeItem(strings.RESULTS);
+    window.location.reload();
   };
 
   // Drawer Side List Component
@@ -58,18 +79,40 @@ const Header = () => {
     <React.Fragment>
       <List className={classes.drawerList}>
         <Divider />
-        <ListItem button>
+        <Link to="/" onClick={toggleDrawer}>
+          <ListItem button>
+            <ListItemIcon>
+              <Home />
+            </ListItemIcon>
+            <ListItemText primary="Home" />
+          </ListItem>
+        </Link>
+        <Link to="/dashboard" onClick={toggleDrawer}>
+          <ListItem button>
+            <ListItemIcon>
+              <Dashboard />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" />
+          </ListItem>
+        </Link>
+        <ListItem button onClick={toggleDialog}>
           <ListItemIcon>
-            <AccountCircle />
+            <Delete />
           </ListItemIcon>
-          <ListItemText primary="Waleed" />
+          <ListItemText primary="Reset Data" className={classes.resetData} />
         </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <ExitToApp />
-          </ListItemIcon>
-          <ListItemText primary="Logout" />
-        </ListItem>
+        <Divider />
+        <a
+          href="https://www.indiabix.com/general-knowledge/questions-and-answers/"
+          target="blank"
+        >
+          <ListItem button>
+            <ListItemIcon>
+              <Launch />
+            </ListItemIcon>
+            <ListItemText primary="Quizzes Source" />
+          </ListItem>
+        </a>
       </List>
       <Divider />
     </React.Fragment>
@@ -87,8 +130,29 @@ const Header = () => {
           </Typography>
         </Toolbar>
 
+        <Dialog
+          open={dialogOpen}
+          onClose={toggleDialog}
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              This will delete all of your results data from your browser
+              storage.
+            </DialogContentText>
+            <DialogActions>
+              <Button color="primary" onClick={toggleDialog}>
+                Cancel
+              </Button>
+              <Button color="primary" onClick={deleteData}>
+                Delete
+              </Button>
+            </DialogActions>
+          </DialogContent>
+        </Dialog>
+
         <Drawer
-          open={state.open}
+          open={drawerOpen}
           anchor="left"
           onClose={toggleDrawer}
           variant="temporary"
