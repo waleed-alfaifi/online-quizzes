@@ -130,7 +130,7 @@ const Dashboard = () => {
     <div>
       <Container fixed disableGutters className="text-center">
         <Typography variant="h4" align="center">
-          Welcome to your dahboard
+          Welcome to your dashboard
         </Typography>
         <Typography
           variant="body1"
