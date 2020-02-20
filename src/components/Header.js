@@ -53,6 +53,9 @@ const useStyles = makeStyles(theme => ({
   resetData: {
     color: theme.palette.error.main,
   },
+  deleteData: {
+    color: theme.palette.error.main,
+  },
 }));
 
 const Header = ({ history }) => {
@@ -143,10 +146,18 @@ const Header = ({ history }) => {
               storage.
             </DialogContentText>
             <DialogActions>
-              <Button color="primary" onClick={toggleDialog}>
+              <Button
+                // variant="contained"
+                color="primary"
+                onClick={toggleDialog}
+              >
                 Cancel
               </Button>
-              <Button color="primary" onClick={deleteData}>
+              <Button
+                // variant="contained"
+                className={classes.deleteData}
+                onClick={deleteData}
+              >
                 Delete
               </Button>
             </DialogActions>
