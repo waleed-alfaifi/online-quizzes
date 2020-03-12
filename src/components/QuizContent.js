@@ -74,17 +74,6 @@ const QuizContent = props => {
         setAnswers(savedAnswers);
       }
     }
-
-    const score = getItemSession(strings.SCORE);
-    if (score) {
-      const savedScore = score[currentQuiz.id];
-      if (savedScore) {
-        setScore(prevScore => ({
-          ...prevScore,
-          value: savedScore,
-        }));
-      }
-    }
   }, [currentQuiz.id]);
 
   useEffect(() => {
@@ -100,6 +89,7 @@ const QuizContent = props => {
 
   useEffect(() => {
     const prevPageObject = getItemSession(strings.CURRENT_PAGE);
+
     if (page !== numberOfQuestions + 1) {
       setItemSession(strings.CURRENT_PAGE, {
         ...prevPageObject,
@@ -123,23 +113,6 @@ const QuizContent = props => {
       [currentQuiz.id]: answers,
     });
   }, [answers, currentQuiz.id]);
-
-  useEffect(() => {
-    const prevScoreObject = getItemSession(strings.SCORE);
-
-    if (page !== numberOfQuestions + 1) {
-      setItemSession(strings.SCORE, {
-        ...prevScoreObject,
-        [currentQuiz.id]: score.value,
-      });
-    } else {
-      // Reset score in storage if the current page is 0
-      setItemSession(strings.SCORE, {
-        ...prevScoreObject,
-        [currentQuiz.id]: 0,
-      });
-    }
-  }, [score, currentQuiz.id, numberOfQuestions, page]);
 
   useEffect(() => {
     if (page === numberOfQuestions + 1) {
@@ -216,8 +189,8 @@ const QuizContent = props => {
     setPage(page - 1);
   };
 
-  const isLastPage = page === numberOfQuestions;
   const isFirstPage = page === 0;
+  const isLastPage = page === numberOfQuestions;
   const isScorePage = page === numberOfQuestions + 1;
 
   // Render the current page
