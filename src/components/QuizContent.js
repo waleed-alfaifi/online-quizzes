@@ -240,6 +240,9 @@ const QuizContent = props => {
             </React.Fragment>
           );
         }
+
+        // No selected question, return nothing.
+        return '';
       });
     }
   };

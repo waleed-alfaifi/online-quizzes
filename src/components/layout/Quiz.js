@@ -28,6 +28,9 @@ const Quiz = () => {
           </React.Fragment>
         );
       }
+
+      // Return nothing if there is no selected quiz
+      return '';
     });
   };
 

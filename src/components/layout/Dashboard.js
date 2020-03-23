@@ -82,7 +82,7 @@ const Dashboard = () => {
       const bars = [];
 
       for (let i = 1; i <= maxNumberTrials; i++) {
-        // To make even-numbered bars colors differ from odd-numbered
+        // To make colors of even-numbered bars different from odd-numbered
         let color = i % 2 === 0 ? '#82ca9d' : '#8884d8';
 
         // Add to an array for rendering
