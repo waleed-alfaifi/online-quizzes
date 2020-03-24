@@ -4,8 +4,12 @@ export const setItemSession = (key, value) => {
 };
 
 export const getItemSession = key => {
-  const parsedValue = JSON.parse(sessionStorage.getItem(key));
-  return parsedValue;
+  try {
+    const parsedValue = JSON.parse(sessionStorage.getItem(key));
+    return parsedValue;
+  } catch (error) {
+    return null;
+  }
 };
 
 export const setItem = (key, value) => {
@@ -14,8 +18,12 @@ export const setItem = (key, value) => {
 };
 
 export const getItem = key => {
-  const parsedValue = JSON.parse(localStorage.getItem(key));
-  return parsedValue;
+  try {
+    const parsedValue = JSON.parse(localStorage.getItem(key));
+    return parsedValue;
+  } catch (error) {
+    return null;
+  }
 };
 
 export const removeItem = key => {
