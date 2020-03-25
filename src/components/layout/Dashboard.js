@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Container, Typography, NativeSelect } from '@material-ui/core';
+import {
+  Container,
+  Typography,
+  NativeSelect,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import {
@@ -21,11 +28,20 @@ const useStyles = makeStyles(theme => ({
   chartContainer: {
     marginTop: theme.spacing(4),
   },
+  quizSelect: {
+    width: '50%',
+  },
+  periodsRadioGroup: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    margin: theme.spacing(2, 0),
+  },
 }));
 
 const Dashboard = () => {
   const classes = useStyles();
   const [selectedQuiz, setSelectedQuiz] = useState(undefined);
+  const [selectedPeriod, setSelectedPeriod] = useState('all');
 
   const formatDate = date => moment(date).format('D/MMM/YYYY');
 
@@ -41,11 +57,19 @@ const Dashboard = () => {
         result => result.quiz === selectedQuiz
       );
 
-      // Get dates of results and format them to be used
-      // later in rendering the chart
-      let dateLabels = quizResults.map(result => {
-        return formatDate(result.date);
+      // Filter results based on the selected period
+      let filteredResults = quizResults.filter(result => {
+        if (selectedPeriod === 'all') {
+          return result;
+        }
+
+        const now = moment();
+        const date = moment(result.date);
+        return now.diff(date, 'days') < selectedPeriod;
       });
+
+      // Return formatted date labels
+      let dateLabels = filteredResults.map(result => formatDate(result.date));
 
       // Remove duplicates
       dateLabels = [...new Set(dateLabels)];
@@ -89,10 +113,7 @@ const Dashboard = () => {
         bars.push(<Bar key={i} dataKey={`Trial ${i}`} fill={color} />);
       }
 
-      return {
-        data,
-        bars,
-      };
+      return [data, bars];
     }
   };
 
@@ -111,11 +132,11 @@ const Dashboard = () => {
   };
 
   const renderBarChart = () => {
-    const { data, bars } = getQuizData();
+    const [data, bars] = getQuizData();
 
     return (
       <ResponsiveContainer width="100%" height={500}>
-        <BarChart data={data} onClick={e => console.log(e)}>
+        <BarChart data={data}>
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
@@ -143,18 +164,41 @@ const Dashboard = () => {
           defaultValue="Choose a quiz"
           value={selectedQuiz}
           onChange={handleChoosingQuiz}
-          style={{ width: '50%' }}
+          className={classes.quizSelect}
         >
           <option disabled>Choose a quiz</option>
           {renderSelectableQuizzes()}
         </NativeSelect>
+
         {selectedQuiz && (
-          <div className={classes.chartContainer}>
-            <Typography variant="h5" align="center">
-              {selectedQuiz}
-            </Typography>
-            {renderBarChart()}
-          </div>
+          <>
+            <RadioGroup
+              aria-label="period"
+              name="period"
+              className={classes.periodsRadioGroup}
+              value={selectedPeriod}
+              onChange={e => setSelectedPeriod(e.target.value)}
+            >
+              <FormControlLabel value="all" control={<Radio />} label="All" />
+              <FormControlLabel
+                value="7"
+                control={<Radio />}
+                label="Last week"
+              />
+              <FormControlLabel
+                value="3"
+                control={<Radio />}
+                label="Last 3 days"
+              />
+            </RadioGroup>
+
+            <div className={classes.chartContainer}>
+              <Typography variant="h5" align="center">
+                {selectedQuiz}
+              </Typography>
+              {renderBarChart()}
+            </div>
+          </>
         )}
       </Container>
     </div>
