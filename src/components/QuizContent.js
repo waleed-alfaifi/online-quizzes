@@ -215,6 +215,7 @@ const QuizContent = props => {
       return (
         <ScorePage
           score={{ value: score.value, from: score.from }}
+          title={`Congratulations, you just finished the ${currentQuiz.title} quiz.`}
           retakeQuiz={retakeQuiz}
         />
       );
