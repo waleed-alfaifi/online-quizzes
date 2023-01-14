@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Container,
   Typography,
@@ -6,9 +6,9 @@ import {
   Radio,
   RadioGroup,
   FormControlLabel,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import moment from 'moment';
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import moment from "moment";
 import {
   BarChart,
   Bar,
@@ -17,11 +17,11 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from 'recharts';
-import { getItem } from '../../helpers/storage';
-import { strings } from '../../config/constants';
+} from "recharts";
+import { getItem } from "../../helpers/storage";
+import { constants } from "../../config/constants";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   instructions: {
     margin: theme.spacing(2, 0),
   },
@@ -29,11 +29,11 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(4),
   },
   quizSelect: {
-    width: '50%',
+    width: "50%",
   },
   periodsRadioGroup: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     margin: theme.spacing(2, 0),
   },
 }));
@@ -41,35 +41,35 @@ const useStyles = makeStyles(theme => ({
 const Dashboard = () => {
   const classes = useStyles();
   const [selectedQuiz, setSelectedQuiz] = useState(undefined);
-  const [selectedPeriod, setSelectedPeriod] = useState('all');
+  const [selectedPeriod, setSelectedPeriod] = useState("all");
 
-  const formatDate = date => moment(date).format('D/MMM/YYYY');
+  const formatDate = (date) => moment(date).format("D/MMM/YYYY");
 
-  const handleChoosingQuiz = e => {
+  const handleChoosingQuiz = (e) => {
     const { value } = e.target;
     setSelectedQuiz(value);
   };
 
   const getQuizData = () => {
-    const results = getItem(strings.RESULTS);
+    const results = getItem(constants.RESULTS);
     if (results) {
       const quizResults = results.filter(
-        result => result.quiz === selectedQuiz
+        (result) => result.quiz === selectedQuiz
       );
 
       // Filter results based on the selected period
-      let filteredResults = quizResults.filter(result => {
-        if (selectedPeriod === 'all') {
+      let filteredResults = quizResults.filter((result) => {
+        if (selectedPeriod === "all") {
           return result;
         }
 
         const now = moment();
         const date = moment(result.date);
-        return now.diff(date, 'days') < selectedPeriod;
+        return now.diff(date, "days") < selectedPeriod;
       });
 
       // Return formatted date labels
-      let dateLabels = filteredResults.map(result => formatDate(result.date));
+      let dateLabels = filteredResults.map((result) => formatDate(result.date));
 
       // Remove duplicates
       dateLabels = [...new Set(dateLabels)];
@@ -82,14 +82,14 @@ const Dashboard = () => {
 
       // Iterate over all dates to find how many trials there are
       // for each date
-      dateLabels.forEach(label => {
+      dateLabels.forEach((label) => {
         const item = {
           name: label,
         };
 
         let counter = 1;
 
-        quizResults.forEach(result => {
+        quizResults.forEach((result) => {
           if (formatDate(result.date) === label) {
             if (counter > maxNumberTrials) {
               maxNumberTrials = counter;
@@ -107,7 +107,7 @@ const Dashboard = () => {
 
       for (let i = 1; i <= maxNumberTrials; i++) {
         // To make colors of even-numbered bars different from odd-numbered
-        let color = i % 2 === 0 ? '#82ca9d' : '#8884d8';
+        let color = i % 2 === 0 ? "#82ca9d" : "#8884d8";
 
         // Add to an array for rendering
         bars.push(<Bar key={i} dataKey={`Trial ${i}`} fill={color} />);
@@ -118,16 +118,16 @@ const Dashboard = () => {
   };
 
   const renderSelectableQuizzes = () => {
-    const results = getItem(strings.RESULTS);
+    const results = getItem(constants.RESULTS);
 
     if (results) {
       // List that contains duplicates
-      const initialList = results.map(result => result.quiz);
+      const initialList = results.map((result) => result.quiz);
 
       // After removing duplicates (ready for rendering)
       const finalList = new Set(initialList);
 
-      return [...finalList].map(quiz => <option key={quiz}>{quiz}</option>);
+      return [...finalList].map((quiz) => <option key={quiz}>{quiz}</option>);
     }
   };
 
@@ -177,7 +177,7 @@ const Dashboard = () => {
               name="period"
               className={classes.periodsRadioGroup}
               value={selectedPeriod}
-              onChange={e => setSelectedPeriod(e.target.value)}
+              onChange={(e) => setSelectedPeriod(e.target.value)}
             >
               <FormControlLabel value="all" control={<Radio />} label="All" />
               <FormControlLabel

@@ -1,9 +1,9 @@
-import React from 'react';
-import { Card, CardContent, Typography, ListItemText } from '@material-ui/core';
-import AnswerListItem from './AnswerListItem';
-import { makeStyles } from '@material-ui/core/styles';
+import React from "react";
+import { Card, CardContent, Typography, ListItemText } from "@material-ui/core";
+import AnswerListItem from "./AnswerListItem";
+import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   questionContent: {
     color: theme.palette.primary.main,
   },
@@ -15,14 +15,14 @@ const Question = ({ question, index, selectAnswer, answer }) => {
   return (
     <React.Fragment>
       <CardContent>
-        <Typography variant="h6">Question {index + 1}:</Typography>
+        <Typography variant="h6">Question {index}:</Typography>
         <Typography variant="h6" className={classes.questionContent}>
           {question.title}
         </Typography>
       </CardContent>
 
       <Card square>
-        {question.choices.map(choice => {
+        {question.choices.map((choice) => {
           return (
             <AnswerListItem
               disableRipple

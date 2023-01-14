@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, withRouter } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -16,7 +16,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-} from '@material-ui/core';
+} from "@material-ui/core";
 import {
   Menu,
   Dashboard,
@@ -24,29 +24,29 @@ import {
   ChevronLeft,
   Home,
   Launch,
-} from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
-import { removeItem } from '../helpers/storage';
-import { strings } from '../config/constants';
+} from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
+import { removeItem } from "../helpers/storage";
+import { constants } from "../config/constants";
 
 // Custom styles
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.primary.dark,
     marginBottom: theme.spacing(3),
   },
   appTitleHeading: {
-    margin: 'auto',
+    margin: "auto",
   },
   drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
     padding: theme.spacing(0.5, 0),
   },
   drawerList: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     width: 250,
     paddingTop: 0,
   },
@@ -73,8 +73,8 @@ const Header = ({ history }) => {
   };
 
   const deleteData = () => {
-    removeItem(strings.RESULTS);
-    history.push('/');
+    removeItem(constants.RESULTS);
+    history.push("/");
     setDialogOpen(false);
     setDrawerOpen(false);
   };
